@@ -1,0 +1,107 @@
+---
+title: "BLB Vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r, warning=FALSE}
+library(blblm)
+library(stats)
+library(dplyr)
+library(future)
+```
+
+## BLBLM
+
+### FastLm
+
+One method to optimize the BLBLM was to increase the speed of the LM function converting a computation heavy part, the linear algebra, to C++ code. This was inspired from the `RcppArmadillo` library here: <https://github.com/RcppCore/RcppArmadillo/blob/master/src/fastLm.cpp>. 
+
+The code could only be partially adapted of course because we are using weighted LM, not the regular LM that is supported by the file.
+
+```{r}
+bench::mark(
+  blblm(mpg ~ wt * hp, data = mtcars, m = 3, B = 100, num_workers = 2, parallelize = FALSE, fast = TRUE),
+  blblm(mpg ~ wt * hp, data = mtcars, m = 3,B = 100, num_workers = 2, parallelize = FALSE, fast = FALSE),
+  relative = TRUE,
+  check = FALSE
+) %>% select(c(n_itr,mem_alloc,total_time)) %>% print()
+```
+
+Clearly, the bench mark shows that including fast blblm increases the speed of the function.
+
+### Parallelization
+
+Another method is to parallelize using `plan` and `future_map`. When parallelization is used, without the improvements from fastmap, on a very large dataset and large B value, we also get a solid increase in speed. The only time this is useful is generally with larger datasets, since the required `plan` function takes a substantial amount of time to run.
+
+```{r, warning=FALSE}
+X = sample(5000)
+y = sample(5000)
+data = data.frame(X,y)
+bench::mark(
+  blblm(y~X, m = 3, data = data, B = 5000, num_workers = 4, parallelize = TRUE, fast = FALSE),
+  blblm(y~X, m = 3, data = data, B = 5000, num_workers = 4, parallelize = FALSE, fast = FALSE),
+  relative = TRUE,
+  check = FALSE
+) %>% select(c(n_itr,mem_alloc,total_time)) %>% print()
+```
+
+Putting these together, we get a really huge overall speed increase when parallelizing and implementing the fastLM process.However, one concern of course with optimization is that we will lose accuracy. This is however not true, as proven by the following example run on alternating `fit` a blblm variable compiled on no parallelization or speed optimization, compared to `fit2` a blblm model compiled with full parallelization and speed optimization.
+
+```{r}
+fit <- blblm(mpg ~ wt * hp, data = mtcars, m = 3, B = 100, num_workers = 4, parallelize = FALSE, fast = FALSE)
+fit_fast <- blblm(mpg ~ wt * hp, data = mtcars, m = 3, B = 100, num_workers = 4, parallelize = TRUE, fast = TRUE)
+
+coef(fit)
+coef(fit_fast)
+
+confint(fit, c("wt", "hp"))
+confint(fit_fast, c("wt", "hp"))
+
+sigma(fit)
+sigma(fit_fast)
+
+sigma(fit, confidence = TRUE)
+sigma(fit_fast, confidence = TRUE)
+
+predict(fit, data.frame(wt = c(2.5, 3), hp = c(150, 170)))
+predict(fit_fast, data.frame(wt = c(2.5, 3), hp = c(150, 170)))
+
+predict(fit, data.frame(wt = c(2.5, 3), hp = c(150, 170)), confidence = TRUE)
+predict(fit_fast, data.frame(wt = c(2.5, 3), hp = c(150, 170)), confidence = TRUE)
+```
+
+Furthermore, the output of the estimating LM function after this change is still relatively similar, showing that no harm is done due to this improvement. As such, it is completely feasible to replace the `lm.wfit` function with an optimized rcpp version at no cost to performance, as well as parallelize using `future_map`.
+
+
+## BLBGLM
+
+A secondary method in the blblm package is the newly added `blbglm` model. This model functions similar to the `blblm` model but optimized for performance in logistic regression, to more accurately predict discrete, categorical values.
+
+For example, let's take the cars data again but this time try to predict the `am` feature as opposed to `mpg`, and see how well the new model predicts values.
+
+```{r, warning = FALSE}
+fit <- blblm(am ~ mpg + cyl + disp + hp, data = mtcars, m = 3, B = 100)
+fit_log <- blbglm(am ~ mpg + cyl + disp + hp, data = mtcars, m = 3, B = 100)
+```
+
+```{r}
+sigma(fit)
+sigma(fit_log)
+
+sigma(fit, confidence = TRUE)
+sigma(fit_log, confidence = TRUE)
+```
+
+As seen, for this problem utilizing the logarithmic fit with `blbglm` drastically improves results in comparison to the regular `blblm` model.
+

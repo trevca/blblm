@@ -4,11 +4,10 @@
 \name{blblm-package}
 \alias{blblm}
 \alias{blblm-package}
-\title{blblm: What the Package Does (Title Case)}
+\title{blblm: Utilizes Bag of Little Bootstraps Functionality for Multiple Model Estimation}
 \description{
-More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+This package utilizes the bag of little bootstraps method in order to estimate different model parameters. The package will run the specified model fit both on subsets of the data as specified by m as well as bootstrapping a number of times as specified by B. It will then be able to provide not only coefficient and sigma values, but also confidence intervals for such values.
 }
 \details{
-Linear Regression with Little Bag of Bootstraps
+Linear and Logistic Regression models with Little Bag of Bootstraps
 }

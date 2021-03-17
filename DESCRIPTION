@@ -1,18 +1,25 @@
 Package: blblm
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Utilizes Bag of Little Bootstraps Functionality for Multiple Model Estimation
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Trevor Carpenter
+Maintainer: Trevor Carpenter <tjcarpenter@ucdavis.edu>
+Description: This package utilizes the bag of little bootstraps method in order to estimate different model parameters. The package will run the specified model fit both on subsets of the data as specified by m as well as bootstrapping a number of times as specified by B. It will then be able to provide not only coefficient and sigma values, but also confidence intervals for such values.  
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests: 
-    testthat (>= 2.1.0)
+    testthat (>= 2.1.0),
+    knitr,
+    rmarkdown
 Imports: 
     purrr,
-    magrittr
+    magrittr,
+    furrr,
+    Rcpp
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
+LinkingTo: 
+    Rcpp,
+    RcppArmadillo
+VignetteBuilder: knitr
