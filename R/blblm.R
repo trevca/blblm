@@ -104,6 +104,7 @@ blbsigma <- function(fit) {
 
 
 #' Prints BLBLM
+#' @description overloads the `print` functionality to show the formula used when printing a `blblm` model.
 #'
 #' @param x the model to be printed
 #' @param ... extra arguments
@@ -119,6 +120,7 @@ print.blblm <- function(x, ...) {
 
 
 #' Gets sigma for BLBLM
+#' @description overloads the standard `sigma` functionality to get the error for a `blblm` model.
 #'
 #' @param object the blblm model to use
 #' @param confidence whether or not to include a confidence interval
@@ -149,6 +151,7 @@ sigma.blblm <- function(object, confidence = FALSE, level = 0.95, ...) {
 #'
 #' @param object the blblm model to use
 #' @param ... extra arguments
+#' @description overloads the standard `coef` functionality to get the coefficients for a `blblm` model.
 #'
 #' @examples
 #' blblm_model <- blblm(mpg ~ wt * hp, data = mtcars, m = 3, B = 100, num_workers = 4, parallelize = FALSE, fast = FALSE)
@@ -162,6 +165,7 @@ coef.blblm <- function(object, ...) {
 
 
 #' Gets confident interval for BLBLM variables
+#' @description overloads the standard `confint` functionality to calculate the confidence intervals for a `blblm` model's coefficients.
 #'
 #' @param object the blblm model to use
 #' @param parm the parameters we want to find the confidence intervals of
@@ -190,6 +194,7 @@ confint.blblm <- function(object, parm = NULL, level = 0.95, ...) {
 }
 
 #' Predicts new dataset for BLBLM
+#' @description overloads the standard `predict` functionality to get predictions for a `blglm` model given an X value.
 #'
 #' @param object the blblm model to use
 #' @param new_data the dataset representing `X` to predict `y` for

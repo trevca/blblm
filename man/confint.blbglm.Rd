@@ -16,7 +16,7 @@
 \item{...}{extra arguments}
 }
 \description{
-Gets confident interval for blbglm variables
+overloads the standard \code{confint} functionality to calculate the confidence intervals for a \code{blbglm} model's coefficients.
 }
 \examples{
 blbglm_model <- blbglm(am ~ wt * hp, data = mtcars, m = 3, B = 100)

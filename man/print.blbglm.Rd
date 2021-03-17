@@ -12,7 +12,7 @@
 \item{...}{extra arguments}
 }
 \description{
-Prints blbglm
+overloads the \code{print} functionality to show the formula used when printing a \code{blbglm} model.
 }
 \examples{
 blbglm_model <- blbglm(am ~ wt * hp, data = mtcars, m = 3, B = 100)

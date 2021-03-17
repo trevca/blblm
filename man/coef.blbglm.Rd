@@ -12,7 +12,7 @@
 \item{...}{extra arguments}
 }
 \description{
-Gets coefficients for blbglm
+overloads the standard \code{coef} functionality to get the coefficients for a \code{blbglm} model.
 }
 \examples{
 blbglm_model <- blbglm(am ~ wt * hp, data = mtcars, m = 3, B = 100)

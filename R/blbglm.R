@@ -1,4 +1,5 @@
 #' BLBGLM
+#' @description  blbglm is a model that performs "bag of little bootstraps" method of regression on a logistic regression model. This is intended for when the dependent variable of a particular model is discrete for classification purposes.
 #'
 #' @param formula, the formula form of the desired Logistic regression.
 #' @param data, the data to pull the formula variables from.
@@ -40,6 +41,8 @@ glm1 <- function(formula, data, n) {
 
 #' Prints blbglm
 #'
+#' @description overloads the `print` functionality to show the formula used when printing a `blbglm` model.
+#'
 #' @param x the model to be printed
 #' @param ... extra arguments
 #' @examples
@@ -54,7 +57,7 @@ print.blbglm <- function(x, ...) {
 
 
 #' Gets sigma for blbglm
-#'
+#' @description overloads the standard `sigma` functionality to get the error for a `blbglm` model.
 #' @param object the blbglm model to use
 #' @param confidence whether or not to include a confidence interval
 #' @param level the confidence level to be used if confidence is `TRUE`, defaults to `0.95`
@@ -81,7 +84,7 @@ sigma.blbglm <- function(object, confidence = FALSE, level = 0.95, ...) {
 }
 
 #' Gets coefficients for blbglm
-#'
+#' @description overloads the standard `coef` functionality to get the coefficients for a `blbglm` model.
 #' @param object the blbglm model to use
 #' @param ... extra arguments
 #'
@@ -97,7 +100,7 @@ coef.blbglm <- function(object, ...) {
 
 
 #' Gets confident interval for blbglm variables
-#'
+#' @description overloads the standard `confint` functionality to calculate the confidence intervals for a `blbglm` model's coefficients.
 #' @param object the blbglm model to use
 #' @param parm the parameters we want to find the confidence intervals of
 #' @param level the confidence level for each confidence interval
@@ -125,7 +128,7 @@ confint.blbglm <- function(object, parm = NULL, level = 0.95, ...) {
 }
 
 #' Predicts new dataset for blbglm
-#'
+#' @description overloads the standard `predict` functionality to get predictions for a `blbglm` model given an X value.
 #' @param object the blbglm model to use
 #' @param new_data the dataset representing `X` to predict `y` for
 #' @param confidence whether or not to create a confident interval, defaults to `FALSE`

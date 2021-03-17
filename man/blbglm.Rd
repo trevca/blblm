@@ -18,7 +18,7 @@ blbglm(formula, data, m = 3, B = 100, seed_value = 100)
 \item{seed_value, }{an initial seed value, defaults to \code{100}, for reproduceability.}
 }
 \description{
-BLBGLM
+blbglm is a model that performs "bag of little bootstraps" method of regression on a logistic regression model. This is intended for when the dependent variable of a particular model is discrete for classification purposes.
 }
 \examples{
 blbglm(am ~ wt * hp, data = mtcars, m = 3, B = 100)

@@ -16,7 +16,7 @@
 \item{...}{extra arguments}
 }
 \description{
-Gets sigma for BLBLM
+overloads the standard \code{sigma} functionality to get the error for a \code{blblm} model.
 }
 \examples{
 blblm_model <- blblm(mpg ~ wt * hp, data = mtcars, m = 3, B = 100, num_workers = 4, parallelize = FALSE, fast = FALSE)

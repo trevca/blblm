@@ -18,7 +18,7 @@
 \item{...}{extra arguments}
 }
 \description{
-Predicts new dataset for BLBLM
+overloads the standard \code{predict} functionality to get predictions for a \code{blglm} model given an X value.
 }
 \examples{
 blblm_model <- blblm(mpg ~ wt * hp, data = mtcars, m = 3, B = 100, num_workers = 4, parallelize = FALSE, fast = FALSE)
